@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana Özel ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background-color: #000;
+            color: #fff;
+        }
+
+        /* Arka Plan Fotoğrafı */
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('fotograf.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.7);
+            z-index: 1;
+        }
+
+        /* Uçuşan Emojiler İçin Canvas */
+        #heartsCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Giriş Ekranı Pop-up */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 100;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .start-btn {
+            padding: 18px 36px;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, #ff4b2b, #ff416c);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 65, 108, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-weight: bold;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 15px 30px rgba(255, 65, 108, 0.7);
+        }
+
+        /* Metin İçerik Alanı */
+        .main-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.5s ease 0.5s, transform 1.5s ease 0.5s;
+        }
+
+        .main-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .letter-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 750px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .letter-card h1 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            color: #ff758c;
+            text-shadow: 0 2px 10px rgba(255, 117, 140, 0.3);
+        }
+
+        .letter-card p {
+            font-size: 1.15rem;
+            color: #f1f1f1;
+            white-space: pre-line;
+            text-align: left;
+        }
+
+        /* Müzik Kontrol Butonu */
+        .music-control {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.4rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Müzik Dosyası -->
+    <audio id="bgMusic" loop>
+        <source src="sarki.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Giriş Katmanı -->
+    <div class="overlay" id="overlay">
+        <h2 style="margin-bottom: 20px; color: #fff; font-weight: 300;">Seni Çok Seviyorum... 🤍</h2>
+        <button class="start-btn" onclick="startExperience()">Sürprizi Gör ❤️</button>
+    </div>
+
+    <!-- Arka Plan -->
+    <div class="bg-image"></div>
+
+    <!-- Uçuşan Kalpler ve Yüzükler için Canvas -->
+    <canvas id="heartsCanvas"></canvas>
+
+    <!-- Ana Metin Kutusu -->
+    <div class="main-container" id="mainContainer">
+        <div class="letter-card">
+            <h1>İyi ki Hayatımdasın, Her Şeyim 💍✨</h1>
+            <p>
+                Sevgilim... Bu siteyi sadece sana olan hislerimi, içimden geçenleri bir nebze olsun yansıtabilmek için hazırladım. 💖
+
+                Hayatıma girdiğin günden beri her şeyin rengi değişti, her anım çok daha anlamlı ve güzel bir hale geldi. Seninle gülmek, seninle dertleşmek, seninle hayaller kurmak bu hayatta yaşadığım en güzel şey. 🌹
+
+                Bazen kelimeler kifayetsiz kalıyor hissettiklerimi anlatmaya ama bil ki kalbimin en başköşesindesin ve hep öyle kalacaksın. Uzakta da olsak, hayatın koşturmacası içinde de olsak seni her an çok seviyorum. 🫂✨
+                Seni kaybetmek istemiyorum,ailen ile tanıştırman için gün lerimi sayıyorum.
+                Seninle en yakın zamanda buluşmak için her şey yaparım,seni çok sevdiğimi unutma.
+
+                İyi ki varsın, iyi ki benim sevgilimsin. Sonsuza kadar el ele, göz göze... 💍❤️
+            </p>
+        </div>
+    </div>
+
+    <!-- Müzik Açma/Kapama Butonu -->
+    <div class="music-control" id="musicBtn" onclick="toggleMusic()">🎵</div>
+
+    <script>
+        const audio = document.getElementById('bgMusic');
+        let isPlaying = false;
+
+        function startExperience() {
+            document.getElementById('overlay').classList.add('hidden');
+            document.getElementById('mainContainer').classList.add('visible');
+
+            audio.play().then(() => {
+                isPlaying = true;
+            }).catch(err => {
+                console.log("Müzik çalınamadı:", err);
+            });
+
+            initParticles();
+        }
+
+        function toggleMusic() {
+            const btn = document.getElementById('musicBtn');
+            if (isPlaying) {
+                audio.pause();
+                btn.innerText = '🔇';
+                isPlaying = false;
+            } else {
+                audio.play();
+                btn.innerText = '🎵';
+                isPlaying = true;
+            }
+        }
+
+        /* --- Uçuşan Kalp ve Yüzük Animasyonu --- */
+        const canvas = document.getElementById('heartsCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const items = ['💖', '💕', '💍', '❤️', '✨', '🌹'];
+        const particles = [];
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 100;
+                this.size = Math.random() * 22 + 16;
+                this.speedY = Math.random() * 1.5 + 0.8;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.char = items[Math.floor(Math.random() * items.length)];
+                this.opacity = Math.random() * 0.7 + 0.3;
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX;
+                if (this.y < -30) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.font = `${this.size}px serif`;
+                ctx.fillText(this.char, this.x, this.y);
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < 40; i++) {
+                particles.push(new Particle());
+            }
+            animate();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+    </script>
+</body>
+</html>
